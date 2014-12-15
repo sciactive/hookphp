@@ -1,0 +1,14 @@
+{
+	"name": "hookphp",
+	"version": "0.0.1alpha",
+	"main": "hook.php",
+	"ignore": [
+		"test*",
+		"composer.json"
+	],
+	"keywords": [
+		"method hooking",
+		"hook",
+		"interception"
+	]
+}
