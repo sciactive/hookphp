@@ -25,7 +25,11 @@ class hook_override__NAMEHERE_ extends hook_override {
 	 * Used to store the prefix (the object's variable name).
 	 * @var string $_hook_prefix
 	 */
-	private $_hook_prefix = '';
+	protected $_hook_prefix = '';
+
+	public function _hook_object() {
+		return $this->_hook_object;
+	}
 
 	public function __construct(&$object, $prefix = '') {
 		$this->_hook_object = $object;
@@ -71,6 +75,15 @@ class hook_override__NAMEHERE_ extends hook_override {
 		$newObject = clone $this->_hook_object;
 		Hook::hookObject($newObject, get_class($newObject).'->', false);
 		return $newObject;
+	}
+
+	public function jsonSerialize() {
+		if (method_exists($this->_hook_object, 'jsonSerialize')) {
+			$args = func_get_args();
+			return call_user_func_array(array($this->_hook_object, 'jsonSerialize'), $args);
+		} else {
+			return json_decode(json_encode($this->_hook_object), true);
+		}
 	}
 
 //#CODEHERE#

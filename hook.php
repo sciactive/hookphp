@@ -76,12 +76,13 @@ class Hook {
 	 * @param int $order The order can be negative, which will run before the method, or positive, which will run after the method. It cannot be zero.
 	 * @param callback The callback.
 	 * @return array An array containing the IDs of the new callback and all matching callbacks.
-	 * @uses hook::sortCallbacks() To resort the callback array in the correct order.
+	 * @uses Hook::sortCallbacks() To resort the callback array in the correct order.
 	 */
 	public static function addCallback($hook, $order, $function) {
 		$callback = array($order, $function);
-		if (!isset(Hook::$hooks[$hook]))
+		if (!isset(Hook::$hooks[$hook])) {
 			Hook::$hooks[$hook] = array();
+		}
 		Hook::$hooks[$hook][] = $callback;
 		uasort(Hook::$hooks[$hook], array('Hook', 'sortCallbacks'));
 		return array_keys(Hook::$hooks[$hook], $callback);
@@ -95,7 +96,9 @@ class Hook {
 	 * @return int 1 if the callback was deleted, 2 if it didn't exist.
 	 */
 	public static function delCallbackByID($hook, $id) {
-		if (!isset(Hook::$hooks[$hook][$id])) return 2;
+		if (!isset(Hook::$hooks[$hook][$id])) {
+			return 2;
+		}
 		unset(Hook::$hooks[$hook][$id]);
 		return 1;
 	}
@@ -124,36 +127,42 @@ class Hook {
 	 * @return bool True on success, false on failure.
 	 */
 	public static function hookObject(&$object, $prefix = '', $recursive = true) {
-		if ((object) $object === $object)
+		if ((object) $object === $object) {
 			$isString = false;
-		else
+		} else {
 			$isString = true;
+		}
 
 		// Make sure we don't take over the hook object, or we'll end up
 		// recursively calling ourself. Some system classes shouldn't be hooked.
-		$className = $isString ? $object : get_class($object);
-		if (in_array($className, array('hook', 'depend', 'config', 'info')))
+		$className = str_replace('\\', '_', $isString ? $object : get_class($object));
+		global $_;
+		if (isset($_) && in_array($className, array('Hook', 'depend', 'config', 'info'))) {
 			return false;
+		}
 
 		if ($recursive && !$isString) {
 			foreach ($object as $curName => &$curProperty) {
-				if ((object) $curProperty === $curProperty)
+				if ((object) $curProperty === $curProperty) {
 					Hook::hookObject($curProperty, $prefix.$curName.'->');
+				}
 			}
 		}
 
 		if (!class_exists("hook_override_$className")) {
-			if ($isString)
+			if ($isString) {
 				$reflection = new ReflectionClass($object);
-			else
+			} else {
 				$reflection = new ReflectionObject($object);
+			}
 			$methods = $reflection->getMethods(ReflectionMethod::IS_PUBLIC);
 
 			$code = '';
 			foreach ($methods as &$curMethod) {
 				$fname = $curMethod->getName();
-				if (in_array($fname, array('__construct', '__destruct', '__get', '__set', '__isset', '__unset', '__toString', '__invoke', '__set_state', '__clone', '__sleep')))
+				if (in_array($fname, array('__construct', '__destruct', '__get', '__set', '__isset', '__unset', '__toString', '__invoke', '__set_state', '__clone', '__sleep'))) {
 					continue;
+				}
 
 				//$fprefix = $curMethod->isFinal() ? 'final ' : '';
 				$fprefix = $curMethod->isStatic() ? 'static ' : '';
@@ -162,10 +171,11 @@ class Hook {
 				foreach ($params as &$curParam) {
 					$paramName = $curParam->getName();
 					$paramPrefix = $curParam->isPassedByReference() ? '&' : '';
-					if ($curParam->isDefaultValueAvailable())
+					if ($curParam->isDefaultValueAvailable()) {
 						$paramSuffix = ' = '.var_export($curParam->getDefaultValue(), true);
-					else
+					} else {
 						$paramSuffix = '';
+					}
 					$paramArray[] = "{$paramPrefix}\${$paramName}{$paramSuffix}";
 					//$paramNameArray[] = "{$paramPrefix}\${$paramName}";
 				}
@@ -230,7 +240,9 @@ class Hook {
 			foreach (Hook::$hooks['all'] as $curCallback) {
 				if (($type == 'all' && $curCallback[0] != 0) || ($type == 'before' && $curCallback[0] < 0) || ($type == 'after' && $curCallback[0] > 0)) {
 					call_user_func_array($curCallback[1], array(&$arguments, $name, &$object, &$function, &$data));
-					if ($arguments === false) return;
+					if ($arguments === false) {
+						return;
+					}
 				}
 			}
 		}
@@ -238,7 +250,9 @@ class Hook {
 			foreach (Hook::$hooks[$name] as $curCallback) {
 				if (($type == 'all' && $curCallback[0] != 0) || ($type == 'before' && $curCallback[0] < 0) || ($type == 'after' && $curCallback[0] > 0)) {
 					call_user_func_array($curCallback[1], array(&$arguments, $name, &$object, &$function, &$data));
-					if ($arguments === false) return;
+					if ($arguments === false) {
+						return;
+					}
 				}
 			}
 		}
@@ -256,8 +270,9 @@ class Hook {
 	 * @access private
 	 */
 	private static function sortCallbacks($a, $b) {
-		if ($a[0] == $b[0])
+		if ($a[0] == $b[0]) {
 			return 0;
+		}
 		return ($a[0] < $b[0]) ? -1 : 1;
 	}
 
