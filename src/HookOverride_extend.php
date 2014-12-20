@@ -1,6 +1,6 @@
-<?php
+<?php namespace SciActive;
 /**
- * Dynamic hook_override class.
+ * Dynamic HookOverride class.
  *
  * @version 0.0.1alpha
  * @license https://www.gnu.org/licenses/lgpl.html
@@ -15,7 +15,7 @@
  * This class is dynamically edited during the takeover of an object for
  * hooking.
  */
-class hook_override__NAMEHERE_ extends hook_override {
+class HookOverride__NAMEHERE_ extends HookOverride {
 	/**
 	 * Used to store the overridden class.
 	 * @var mixed $_hook_object
@@ -73,7 +73,7 @@ class hook_override__NAMEHERE_ extends hook_override {
 	public function __clone() {
 		// TODO: Test this. Make sure cloning works properly.
 		$newObject = clone $this->_hook_object;
-		Hook::hookObject($newObject, get_class($newObject).'->', false);
+		H::hookObject($newObject, get_class($newObject).'->', false);
 		return $newObject;
 	}
 

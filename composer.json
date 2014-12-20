@@ -26,5 +26,13 @@
     },
     "archive": {
         "exclude": ["bower.json", "test*"]
-    }
+    },
+	"autoload": {
+		"psr-0": {
+			"SciActive\\": "src/"
+		},
+		"psr-4": {
+			"SciActive\\": "src/"
+		}
+	}
 }

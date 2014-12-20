@@ -1,6 +1,6 @@
-<?php
+<?php namespace SciActive;
 /**
- * Dynamic hook_override class.
+ * Dynamic HookOverride class.
  *
  * @version 0.0.1alpha
  * @license https://www.gnu.org/licenses/lgpl.html
@@ -12,4 +12,4 @@
 /**
  * A base class to check whether an object has been hooked.
  */
-class hook_override { }
+class HookOverride { }

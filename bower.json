@@ -1,7 +1,7 @@
 {
 	"name": "hookphp",
 	"version": "0.0.1alpha",
-	"main": "hook.php",
+	"main": "src/H.php",
 	"ignore": [
 		"test*",
 		"composer.json"
