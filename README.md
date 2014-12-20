@@ -14,7 +14,7 @@ bower install https://github.com/sciactive/hookphp.git
 
 ## Getting Started
 
-All you need to do is include the H.php file.
+If you don't use an autoloader, all you need to do is include the H.php file.
 
 ```php
 require("H.php");
