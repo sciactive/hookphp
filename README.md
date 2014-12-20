@@ -4,7 +4,7 @@ Method hooking in PHP.
 
 ## Getting Started
 
-All you need to do is include the require.php file.
+All you need to do is include the H.php file.
 
 ```php
 require("H.php");
