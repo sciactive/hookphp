@@ -1,7 +1,7 @@
 {
     "name": "sciactive/hookphp",
     "description": "Method hooking in PHP.",
-    "version": "0.0.1alpha",
+    "version": "1.0.0",
     "type": "library",
     "keywords": [
 		"method hooking",

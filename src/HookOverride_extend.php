@@ -2,7 +2,7 @@
 /**
  * Dynamic HookOverride class.
  *
- * @version 0.0.1alpha
+ * @version 1.0.0
  * @license https://www.gnu.org/licenses/lgpl.html
  * @author Hunter Perrin <hperrin@gmail.com>
  * @copyright SciActive.com
