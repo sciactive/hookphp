@@ -2,6 +2,16 @@
 
 Method hooking in PHP.
 
+## Installation
+
+You can install HookPHP with Composer or Bower.
+
+```sh
+composer require sciactive/hookphp
+
+bower install https://github.com/sciactive/hookphp.git
+```
+
 ## Getting Started
 
 All you need to do is include the H.php file.
