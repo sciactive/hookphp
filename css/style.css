@@ -763,6 +763,7 @@ table td:last-child {
 		background: url('../images/header.jpg');
 		background-size: cover;
 		background-position: center center;
+		background-attachment: fixed;
 		padding: 30vh 0 0;
 		text-align: center;
 		color: #fff;
@@ -778,6 +779,7 @@ table td:last-child {
 			width: 100%;
 			height: 100%;
 			background: url('images/overlay.png');
+			background-attachment: fixed;
 		}
 
 		#header > header,
@@ -869,18 +871,21 @@ table td:last-child {
 			{
 				background:	url('images/overlay.png'),
 							linear-gradient(45deg, #b39c68, #a56365, #412e4c);
+				background-attachment: fixed;
 			}
 
 			.main > .content.style2
 			{
 				background:	url('images/overlay.png'),
 							linear-gradient(45deg, #384955, #655361, #85505f);
+				background-attachment: fixed;
 			}
 
 			.main > .content.style3
 			{
 				background:	url('images/overlay.png'),
 							linear-gradient(45deg, #5f796b, #3a4e59, #2f394e);
+				background-attachment: fixed;
 			}
 
 			.main > .content.style4
