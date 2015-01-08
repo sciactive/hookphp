@@ -1,5 +1,7 @@
 # <img alt="logo" src="https://raw.githubusercontent.com/sciactive/2be-extras/master/logo/product-icon-40-bw.png" align="top" /> HookPHP
 
+[![Latest Stable Version](https://img.shields.io/packagist/v/sciactive/hookphp.svg?style=flat)](https://packagist.org/packages/sciactive/hookphp) [![License](https://img.shields.io/packagist/l/sciactive/hookphp.svg?style=flat)](https://packagist.org/packages/sciactive/hookphp) [![Total Downloads](https://img.shields.io/packagist/dt/sciactive/hookphp.svg?style=flat)](https://packagist.org/packages/sciactive/hookphp) [![Open Issues](https://img.shields.io/github/issues/sciactive/hookphp.svg?style=flat)](https://github.com/sciactive/hookphp/issues)
+
 Method hooking in PHP.
 
 ## Installation
