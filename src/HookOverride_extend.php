@@ -2,7 +2,7 @@
 /**
  * Dynamic HookOverride class.
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @license https://www.gnu.org/licenses/lgpl.html
  * @author Hunter Perrin <hperrin@gmail.com>
  * @copyright SciActive.com
@@ -73,7 +73,7 @@ class HookOverride__NAMEHERE_ extends HookOverride {
 	public function __clone() {
 		// TODO: Test this. Make sure cloning works properly.
 		$newObject = clone $this->_hook_object;
-		H::hookObject($newObject, get_class($newObject).'->', false);
+		Hook::hookObject($newObject, get_class($newObject).'->', false);
 		return $newObject;
 	}
 

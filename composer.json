@@ -1,7 +1,7 @@
 {
     "name": "sciactive/hookphp",
     "description": "Method hooking in PHP.",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "type": "library",
     "keywords": [
 		"method hooking",
@@ -9,7 +9,7 @@
 		"interception"
 	],
     "homepage": "http://hookphp.org/",
-    "time": "2014-12-15",
+    "time": "2015-02-19",
     "license": "LGPL",
     "authors": [
         {

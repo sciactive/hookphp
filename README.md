@@ -16,10 +16,10 @@ bower install https://github.com/sciactive/hookphp.git
 
 ## Getting Started
 
-If you don't use an autoloader, all you need to do is include the H.php file.
+If you don't use an autoloader, all you need to do is include the Hook.php file.
 
 ```php
-require("H.php");
+require("Hook.php");
 ```
 
 Now you can start setting up objects for method hooking.
@@ -31,13 +31,13 @@ class Test {
 	}
 }
 $obj = new Test;
-\SciActive\H::hookObject($obj, 'Test->');
+\SciActive\Hook::hookObject($obj, 'Test->');
 ```
 
 And modifying their method calls.
 
 ```php
-\SciActive\H::addCallback('Test->testFunction', -2, function(&$arguments, $name, &$object, &$function, &$data){
+\SciActive\Hook::addCallback('Test->testFunction', -2, function(&$arguments, $name, &$object, &$function, &$data){
 	$arguments[0] = 'New argument instead.';
 });
 ```

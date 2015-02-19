@@ -1,8 +1,8 @@
 <?php
 
 error_reporting(E_ALL);
-require 'src/H.php';
-use SciActive\H as H;
+require 'src/Hook.php';
+use SciActive\Hook as Hook;
 
 echo "Testing...<br>\n";
 
@@ -20,8 +20,8 @@ class Test {
 }
 
 $obj = new Test;
-H::hookObject($obj, 'Test->');
-H::addCallback('Test->testFunction', -2, function(&$arguments, $name, &$object, &$function, &$data){
+Hook::hookObject($obj, 'Test->');
+Hook::addCallback('Test->testFunction', -2, function(&$arguments, $name, &$object, &$function, &$data){
 	$arguments[0] = 'Still Failure!';
 	if ($object->test !== 'right') {
 		echo "Object check failed.<br>\n";
@@ -34,12 +34,12 @@ H::addCallback('Test->testFunction', -2, function(&$arguments, $name, &$object, 
 		echo "Name check passed.<br>\n";
 	}
 });
-H::addCallback('Test->testFunction', -1, function(&$arguments, $name, &$object, &$function, &$data){
+Hook::addCallback('Test->testFunction', -1, function(&$arguments, $name, &$object, &$function, &$data){
 	$arguments[0] = 'Success!';
 	$data['test'] = 1;
 	$function = array($object, 'testFunctionReal');
 });
-H::addCallback('Test->testFunction', 1, function(&$return, $name, &$object, &$function, &$data){
+Hook::addCallback('Test->testFunction', 1, function(&$return, $name, &$object, &$function, &$data){
 	if ($data['test'] !== 1) {
 		echo "Data check failed.<br>\n";
 	} else {

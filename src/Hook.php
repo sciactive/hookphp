@@ -7,7 +7,7 @@
  * Hooks are used to call a callback when a method is called and optionally
  * manipulate the arguments/function call/return value.
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @license https://www.gnu.org/licenses/lgpl.html
  * @author Hunter Perrin <hperrin@gmail.com>
  * @copyright SciActive.com
@@ -18,7 +18,7 @@ if (!class_exists('\\SciActive\\HookOverride')) {
 	include_once(__DIR__.DIRECTORY_SEPARATOR.'HookOverride.php');
 }
 
-class H {
+class Hook {
 	/**
 	 * An array of the callbacks for each hook.
 	 * @var array
@@ -80,16 +80,16 @@ class H {
 	 * @param int $order The order can be negative, which will run before the method, or positive, which will run after the method. It cannot be zero.
 	 * @param callback The callback.
 	 * @return array An array containing the IDs of the new callback and all matching callbacks.
-	 * @uses \SciActive\H::sortCallbacks() To resort the callback array in the correct order.
+	 * @uses \SciActive\Hook::sortCallbacks() To resort the callback array in the correct order.
 	 */
 	public static function addCallback($hook, $order, $function) {
 		$callback = array($order, $function);
-		if (!isset(H::$hooks[$hook])) {
-			H::$hooks[$hook] = array();
+		if (!isset(Hook::$hooks[$hook])) {
+			Hook::$hooks[$hook] = array();
 		}
-		H::$hooks[$hook][] = $callback;
-		uasort(H::$hooks[$hook], '\\SciActive\\H::sortCallbacks');
-		return array_keys(H::$hooks[$hook], $callback);
+		Hook::$hooks[$hook][] = $callback;
+		uasort(Hook::$hooks[$hook], '\\SciActive\\Hook::sortCallbacks');
+		return array_keys(Hook::$hooks[$hook], $callback);
 	}
 
 	/**
@@ -100,10 +100,10 @@ class H {
 	 * @return int 1 if the callback was deleted, 2 if it didn't exist.
 	 */
 	public static function delCallbackByID($hook, $id) {
-		if (!isset(H::$hooks[$hook][$id])) {
+		if (!isset(Hook::$hooks[$hook][$id])) {
 			return 2;
 		}
-		unset(H::$hooks[$hook][$id]);
+		unset(Hook::$hooks[$hook][$id]);
 		return 1;
 	}
 
@@ -117,7 +117,7 @@ class H {
 	 * @return array An array of callbacks.
 	 */
 	public static function getCallbacks() {
-		return H::$hooks;
+		return Hook::$hooks;
 	}
 
 	/**
@@ -141,14 +141,14 @@ class H {
 		// recursively calling ourself. Some system classes shouldn't be hooked.
 		$className = str_replace('\\', '_', $isString ? $object : get_class($object));
 		global $_;
-		if (isset($_) && in_array($className, array('\\SciActive\\H', 'depend', 'config', 'info'))) {
+		if (isset($_) && in_array($className, array('\\SciActive\\Hook', 'depend', 'config', 'info'))) {
 			return false;
 		}
 
 		if ($recursive && !$isString) {
 			foreach ($object as $curName => &$curProperty) {
 				if ((object) $curProperty === $curProperty) {
-					H::hookObject($curProperty, $prefix.$curName.'->');
+					Hook::hookObject($curProperty, $prefix.$curName.'->');
 				}
 			}
 		}
@@ -203,13 +203,13 @@ class H {
 				//."\t}\n"
 				."\t\$function = array(\$this->_hook_object, '$fname');\n"
 				."\t\$data = array();\n"
-				."\t\\SciActive\\H::runCallbacks(\$this->_hook_prefix.'$fname', \$arguments, 'before', \$this->_hook_object, \$function, \$data);\n"
+				."\t\\SciActive\\Hook::runCallbacks(\$this->_hook_prefix.'$fname', \$arguments, 'before', \$this->_hook_object, \$function, \$data);\n"
 				."\tif (\$arguments !== false) {\n"
 				."\t\t\$return = call_user_func_array(\$function, \$arguments);\n"
 				."\t\tif ((object) \$return === \$return && get_class(\$return) === '$className')\n"
-				."\t\t\t\\SciActive\\H::hookObject(\$return, '$prefix', false);\n"
+				."\t\t\t\\SciActive\\Hook::hookObject(\$return, '$prefix', false);\n"
 				."\t\t\$return = array(\$return);\n"
-				."\t\t\\SciActive\\H::runCallbacks(\$this->_hook_prefix.'$fname', \$return, 'after', \$this->_hook_object, \$function, \$data);\n"
+				."\t\t\\SciActive\\Hook::runCallbacks(\$this->_hook_prefix.'$fname', \$return, 'after', \$this->_hook_object, \$function, \$data);\n"
 				."\t\tif ((array) \$return === \$return)\n"
 				."\t\t\treturn \$return[0];\n"
 				."\t}\n"
@@ -217,7 +217,7 @@ class H {
 			}
 			unset($curMethod);
 			// Build a HookOverride class.
-			$include = str_replace(array('_NAMEHERE_', '//#CODEHERE#', '<?php', '?>'), array($className, $code, '', ''), H::$hookFile);
+			$include = str_replace(array('_NAMEHERE_', '//#CODEHERE#', '<?php', '?>'), array($className, $code, '', ''), Hook::$hookFile);
 			eval ($include);
 		}
 
@@ -240,8 +240,8 @@ class H {
 	 * @param array &$data A data array for callback communication.
 	 */
 	public static function runCallbacks($name, &$arguments = array(), $type = 'all', &$object = null, &$function = null, &$data = array()) {
-		if (isset(H::$hooks['all'])) {
-			foreach (H::$hooks['all'] as $curCallback) {
+		if (isset(Hook::$hooks['all'])) {
+			foreach (Hook::$hooks['all'] as $curCallback) {
 				if (($type == 'all' && $curCallback[0] != 0) || ($type == 'before' && $curCallback[0] < 0) || ($type == 'after' && $curCallback[0] > 0)) {
 					call_user_func_array($curCallback[1], array(&$arguments, $name, &$object, &$function, &$data));
 					if ($arguments === false) {
@@ -250,8 +250,8 @@ class H {
 				}
 			}
 		}
-		if (isset(H::$hooks[$name])) {
-			foreach (H::$hooks[$name] as $curCallback) {
+		if (isset(Hook::$hooks[$name])) {
+			foreach (Hook::$hooks[$name] as $curCallback) {
 				if (($type == 'all' && $curCallback[0] != 0) || ($type == 'before' && $curCallback[0] < 0) || ($type == 'after' && $curCallback[0] > 0)) {
 					call_user_func_array($curCallback[1], array(&$arguments, $name, &$object, &$function, &$data));
 					if ($arguments === false) {
@@ -281,8 +281,8 @@ class H {
 	}
 
 	public static function getHookFile() {
-		H::$hookFile = file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'HookOverride_extend.php');
+		Hook::$hookFile = file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'HookOverride_extend.php');
 	}
 }
 
-H::getHookFile();
+Hook::getHookFile();
