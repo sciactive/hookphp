@@ -2,7 +2,7 @@
 /**
  * Dynamic HookOverride class.
  *
- * @version 1.2.0
+ * @version 1.2.1
  * @license https://www.gnu.org/licenses/lgpl.html
  * @author Hunter Perrin <hperrin@gmail.com>
  * @copyright SciActive.com
@@ -37,7 +37,8 @@ class HookOverride__NAMEHERE_ extends HookOverride implements \JsonSerializable 
 	}
 
 	public function &__get($name) {
-		return $val =& $this->_hookObject->$name;
+		$val =& $this->_hookObject->$name;
+		return $val;
 	}
 
 	public function __set($name, $value) {

@@ -7,7 +7,7 @@
  * Hooks are used to call a callback when a method is called and optionally
  * manipulate the arguments/function call/return value.
  *
- * @version 1.2.0
+ * @version 1.2.1
  * @license https://www.gnu.org/licenses/lgpl.html
  * @author Hunter Perrin <hperrin@gmail.com>
  * @copyright SciActive.com
