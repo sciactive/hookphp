@@ -2,7 +2,7 @@
 /**
  * Dynamic HookOverride class.
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @license https://www.gnu.org/licenses/lgpl.html
  * @author Hunter Perrin <hperrin@gmail.com>
  * @copyright SciActive.com
@@ -15,74 +15,74 @@
  * This class is dynamically edited during the takeover of an object for
  * hooking.
  */
-class HookOverride__NAMEHERE_ extends HookOverride {
+class HookOverride__NAMEHERE_ extends HookOverride implements \JsonSerializable {
 	/**
 	 * Used to store the overridden class.
-	 * @var mixed $_hook_object
+	 * @var mixed $_hookObject
 	 */
-	protected $_hook_object = null;
+	protected $_hookObject = null;
 	/**
 	 * Used to store the prefix (the object's variable name).
-	 * @var string $_hook_prefix
+	 * @var string $_hookPrefix
 	 */
-	protected $_hook_prefix = '';
+	protected $_hookPrefix = '';
 
-	public function _hook_object() {
-		return $this->_hook_object;
+	public function _hookObject() {
+		return $this->_hookObject;
 	}
 
 	public function __construct(&$object, $prefix = '') {
-		$this->_hook_object = $object;
-		$this->_hook_prefix = $prefix;
+		$this->_hookObject = $object;
+		$this->_hookPrefix = $prefix;
 	}
 
 	public function &__get($name) {
-		return $val =& $this->_hook_object->$name;
+		return $val =& $this->_hookObject->$name;
 	}
 
 	public function __set($name, $value) {
-		return $this->_hook_object->$name = $value;
+		return $this->_hookObject->$name = $value;
 	}
 
 	public function __isset($name) {
-		return isset($this->_hook_object->$name);
+		return isset($this->_hookObject->$name);
 	}
 
 	public function __unset($name) {
-		unset($this->_hook_object->$name);
+		unset($this->_hookObject->$name);
 	}
 
 	public function __toString() {
-		return (string) $this->_hook_object;
+		return (string) $this->_hookObject;
 	}
 
 	public function __invoke() {
-		if (method_exists($this->_hook_object, '__invoke')) {
+		if (method_exists($this->_hookObject, '__invoke')) {
 			$args = func_get_args();
-			return call_user_func_array(array($this->_hook_object, '__invoke'), $args);
+			return call_user_func_array(array($this->_hookObject, '__invoke'), $args);
 		}
 	}
 
 	public function __set_state() {
-		if (method_exists($this->_hook_object, '__set_state')) {
+		if (method_exists($this->_hookObject, '__set_state')) {
 			$args = func_get_args();
-			return call_user_func_array(array($this->_hook_object, '__set_state'), $args);
+			return call_user_func_array(array($this->_hookObject, '__set_state'), $args);
 		}
 	}
 
 	public function __clone() {
 		// TODO: Test this. Make sure cloning works properly.
-		$newObject = clone $this->_hook_object;
+		$newObject = clone $this->_hookObject;
 		Hook::hookObject($newObject, get_class($newObject).'->', false);
 		return $newObject;
 	}
 
 	public function jsonSerialize() {
-		if (method_exists($this->_hook_object, 'jsonSerialize')) {
+		if (is_callable($this->_hookObject, 'jsonSerialize')) {
 			$args = func_get_args();
-			return call_user_func_array(array($this->_hook_object, 'jsonSerialize'), $args);
+			return call_user_func_array(array($this->_hookObject, 'jsonSerialize'), $args);
 		} else {
-			return json_decode(json_encode($this->_hook_object), true);
+			return $this->_hookObject;
 		}
 	}
 

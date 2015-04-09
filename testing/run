@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+echo "Running HookPHP Testing"
+echo "Use \`run coverage\` to build coverage clover."
+echo
+
+if [[ "$1" == "coverage" ]]; then
+	CVG="--coverage-clover logs/clover.xml"
+else
+	CVG=""
+fi
+
+cd $(dirname $0)
+
+echo "################################################################################"
+echo "#                              Running tests                                   #"
+echo -e "################################################################################\n"
+
+phpunit --testsuite default --bootstrap bootstrap.php $CVG

@@ -6,12 +6,10 @@ Method hooking in PHP.
 
 ## Installation
 
-You can install HookPHP with Composer or Bower.
+You can install HookPHP with Composer.
 
 ```sh
 composer require sciactive/hookphp
-
-bower install https://github.com/sciactive/hookphp.git
 ```
 
 ## Getting Started
@@ -30,7 +28,7 @@ class Test {
 		echo $string;
 	}
 }
-$obj = new Test;
+$obj = new Test();
 \SciActive\Hook::hookObject($obj, 'Test->');
 ```
 
@@ -102,6 +100,14 @@ A callback can replace or alter `$object` to affect what the method is being cal
 A callback can replace `$function` to cause a different function or method to run instead.
 
 A callback can add and alter data in the `$data` array to communicate with other callbacks. This is especially useful when communicating with callbacks that run on the other side of the method call.
+
+## Retrieving a Hooked Object
+
+If you need to retrieve an object that has been hooked, you can use the `_hookObject` method:
+
+```php
+$originalObject = $hookedObject->_hookObject();
+```
 
 ## Contacting the Developer
 

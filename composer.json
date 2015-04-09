@@ -1,7 +1,7 @@
 {
     "name": "sciactive/hookphp",
     "description": "Method hooking in PHP.",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "type": "library",
     "keywords": [
 		"method hooking",
@@ -25,7 +25,7 @@
         "source": "https://github.com/sciactive/hookphp"
     },
     "archive": {
-        "exclude": ["bower.json", "test*"]
+        "exclude": ["testing"]
     },
 	"autoload": {
 		"psr-0": {

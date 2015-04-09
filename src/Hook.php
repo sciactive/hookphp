@@ -7,14 +7,14 @@
  * Hooks are used to call a callback when a method is called and optionally
  * manipulate the arguments/function call/return value.
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @license https://www.gnu.org/licenses/lgpl.html
  * @author Hunter Perrin <hperrin@gmail.com>
  * @copyright SciActive.com
  * @link http://requirephp.org
  */
 
-if (!class_exists('\\SciActive\\HookOverride')) {
+if (!class_exists('\SciActive\HookOverride')) {
 	include_once(__DIR__.DIRECTORY_SEPARATOR.'HookOverride.php');
 }
 
@@ -141,7 +141,7 @@ class Hook {
 		// recursively calling ourself. Some system classes shouldn't be hooked.
 		$className = str_replace('\\', '_', $isString ? $object : get_class($object));
 		global $_;
-		if (isset($_) && in_array($className, array('\\SciActive\\Hook', 'depend', 'config', 'info'))) {
+		if (isset($_) && in_array($className, array('\SciActive\Hook', 'depend', 'config', 'info'))) {
 			return false;
 		}
 
@@ -153,7 +153,7 @@ class Hook {
 			}
 		}
 
-		if (!class_exists("\\SciActive\\HookOverride_$className")) {
+		if (!class_exists("\SciActive\HookOverride_$className")) {
 			if ($isString) {
 				$reflection = new \ReflectionClass($object);
 			} else {
@@ -164,7 +164,7 @@ class Hook {
 			$code = '';
 			foreach ($methods as &$curMethod) {
 				$fname = $curMethod->getName();
-				if (in_array($fname, array('__construct', '__destruct', '__get', '__set', '__isset', '__unset', '__toString', '__invoke', '__set_state', '__clone', '__sleep'))) {
+				if (in_array($fname, array('__construct', '__destruct', '__get', '__set', '__isset', '__unset', '__toString', '__invoke', '__set_state', '__clone', '__sleep', 'jsonSerialize'))) {
 					continue;
 				}
 
@@ -201,15 +201,15 @@ class Hook {
 				//."\t\tfor (\$i = \$arg_count; \$i < \$real_arg_count; \$i++)\n"
 				//."\t\t\t\$arguments[] = func_get_arg(\$i);\n"
 				//."\t}\n"
-				."\t\$function = array(\$this->_hook_object, '$fname');\n"
+				."\t\$function = array(\$this->_hookObject, '$fname');\n"
 				."\t\$data = array();\n"
-				."\t\\SciActive\\Hook::runCallbacks(\$this->_hook_prefix.'$fname', \$arguments, 'before', \$this->_hook_object, \$function, \$data);\n"
+				."\t\\SciActive\\Hook::runCallbacks(\$this->_hookPrefix.'$fname', \$arguments, 'before', \$this->_hookObject, \$function, \$data);\n"
 				."\tif (\$arguments !== false) {\n"
 				."\t\t\$return = call_user_func_array(\$function, \$arguments);\n"
 				."\t\tif ((object) \$return === \$return && get_class(\$return) === '$className')\n"
 				."\t\t\t\\SciActive\\Hook::hookObject(\$return, '$prefix', false);\n"
 				."\t\t\$return = array(\$return);\n"
-				."\t\t\\SciActive\\Hook::runCallbacks(\$this->_hook_prefix.'$fname', \$return, 'after', \$this->_hook_object, \$function, \$data);\n"
+				."\t\t\\SciActive\\Hook::runCallbacks(\$this->_hookPrefix.'$fname', \$return, 'after', \$this->_hookObject, \$function, \$data);\n"
 				."\t\tif ((array) \$return === \$return)\n"
 				."\t\t\treturn \$return[0];\n"
 				."\t}\n"
@@ -218,10 +218,10 @@ class Hook {
 			unset($curMethod);
 			// Build a HookOverride class.
 			$include = str_replace(array('_NAMEHERE_', '//#CODEHERE#', '<?php', '?>'), array($className, $code, '', ''), Hook::$hookFile);
-			eval ($include);
+			eval($include);
 		}
 
-		eval ('$object = new \\SciActive\\HookOverride_'.$className.' ($object, $prefix);');
+		eval('$object = new \SciActive\HookOverride_'.$className.' ($object, $prefix);');
 		return true;
 	}
 
