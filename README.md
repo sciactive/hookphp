@@ -1,6 +1,6 @@
 # <img alt="logo" src="https://raw.githubusercontent.com/sciactive/2be-extras/master/logo/product-icon-40-bw.png" align="top" /> HookPHP
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/sciactive/hookphp.svg?style=flat)](https://packagist.org/packages/sciactive/hookphp) [![License](https://img.shields.io/packagist/l/sciactive/hookphp.svg?style=flat)](https://packagist.org/packages/sciactive/hookphp) [![Total Downloads](https://img.shields.io/packagist/dt/sciactive/hookphp.svg?style=flat)](https://packagist.org/packages/sciactive/hookphp) [![Open Issues](https://img.shields.io/github/issues/sciactive/hookphp.svg?style=flat)](https://github.com/sciactive/hookphp/issues)
+[![Build Status](https://scrutinizer-ci.com/g/sciactive/hookphp/badges/build.png?b=master)](https://scrutinizer-ci.com/g/sciactive/hookphp/build-status/master) [![Latest Stable Version](https://img.shields.io/packagist/v/sciactive/hookphp.svg?style=flat)](https://packagist.org/packages/sciactive/hookphp) [![License](https://img.shields.io/packagist/l/sciactive/hookphp.svg?style=flat)](https://packagist.org/packages/sciactive/hookphp) [![Open Issues](https://img.shields.io/github/issues/sciactive/hookphp.svg?style=flat)](https://github.com/sciactive/hookphp/issues) [![Code Quality](https://img.shields.io/scrutinizer/g/sciactive/hookphp.svg?style=flat)](https://scrutinizer-ci.com/g/sciactive/hookphp/) [![Coverage](https://img.shields.io/scrutinizer/coverage/g/sciactive/hookphp.svg?style=flat)](https://scrutinizer-ci.com/g/sciactive/hookphp/)
 
 Method hooking in PHP.
 
