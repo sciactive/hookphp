@@ -7,7 +7,7 @@
  * Hooks are used to call a callback when a method is called and optionally
  * manipulate the arguments/function call/return value.
  *
- * @version 1.2.1
+ * @version 1.2.2
  * @license https://www.gnu.org/licenses/lgpl.html
  * @author Hunter Perrin <hperrin@gmail.com>
  * @copyright SciActive.com
@@ -171,7 +171,7 @@ class Hook {
 				//$fprefix = $curMethod->isFinal() ? 'final ' : '';
 				$fprefix = $curMethod->isStatic() ? 'static ' : '';
 				$params = $curMethod->getParameters();
-				$paramArray = array(); //$paramNameArray
+				$paramArray = $paramNameArray = array();
 				foreach ($params as &$curParam) {
 					$paramName = $curParam->getName();
 					$paramPrefix = $curParam->isPassedByReference() ? '&' : '';
@@ -181,26 +181,40 @@ class Hook {
 						$paramSuffix = '';
 					}
 					$paramArray[] = "{$paramPrefix}\${$paramName}{$paramSuffix}";
-					//$paramNameArray[] = "{$paramPrefix}\${$paramName}";
+					$paramNameArray[] = "{$paramPrefix}\${$paramName}";
 				}
 				unset($curParam);
 				$code .= $fprefix."function $fname(".implode(', ', $paramArray).") {\n"
-				// We must use a debug_backtrace, because that's the best way to
-				// get all the passed arguments, by reference. 5.4 and up lets
-				// us limit it to 1 frame.
-				.(version_compare(PHP_VERSION, '5.4.0') >= 0 ?
-					"\t\$arguments = debug_backtrace(false, 1);\n" :
-					"\t\$arguments = debug_backtrace(false);\n"
+				.(defined('HHVM_VERSION') ?
+					(
+						// There is bad behavior in HHVM where debug_backtrace
+						// won't return arguments, but calling func_get_args
+						// somewhere in the function changes that behavior to be
+						// consistent with official PHP. However, it also
+						// returns arguments by value, instead of by reference.
+						// So, we must use a more direct method.
+						"\t\$arguments = array();\n"
+						.(count($paramNameArray) > 0 ?
+							"\t\$arguments[] = ".implode('; $arguments[] = ', $paramNameArray).";\n" :
+							''
+						)
+						."\t\$real_arg_count = func_num_args();\n"
+						."\t\$arg_count = count(\$arguments);\n"
+						."\tif (\$real_arg_count > \$arg_count) {\n"
+						."\t\tfor (\$i = \$arg_count; \$i < \$real_arg_count; \$i++)\n"
+						."\t\t\t\$arguments[] = func_get_arg(\$i);\n"
+						."\t}\n"
+					) : (
+						// We must use a debug_backtrace, because that's the
+						// best way to get all the passed arguments, by
+						// reference. 5.4 and up lets us limit it to 1 frame.
+						(version_compare(PHP_VERSION, '5.4.0') >= 0 ?
+							"\t\$arguments = debug_backtrace(false, 1);\n" :
+							"\t\$arguments = debug_backtrace(false);\n"
+						)
+						."\t\$arguments = \$arguments[0]['args'];\n"
+					)
 				)
-				."\t\$arguments = \$arguments[0]['args'];\n"
-				// This method works, but isn't faster, and might introduce bugs.
-				//."\t\$arguments = array(".implode(', ', $paramNameArray).");\n"
-				//."\t\$real_arg_count = func_num_args();\n"
-				//."\t\$arg_count = count(\$arguments);\n"
-				//."\tif (\$real_arg_count > \$arg_count) {\n"
-				//."\t\tfor (\$i = \$arg_count; \$i < \$real_arg_count; \$i++)\n"
-				//."\t\t\t\$arguments[] = func_get_arg(\$i);\n"
-				//."\t}\n"
 				."\t\$function = array(\$this->_hookObject, '$fname');\n"
 				."\t\$data = array();\n"
 				."\t\\SciActive\\Hook::runCallbacks(\$this->_hookPrefix.'$fname', \$arguments, 'before', \$this->_hookObject, \$function, \$data);\n"
