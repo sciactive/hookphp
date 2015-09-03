@@ -193,40 +193,40 @@ class Hook {
                         // consistent with official PHP. However, it also
                         // returns arguments by value, instead of by reference.
                         // So, we must use a more direct method.
-                        "\t\$arguments = array();\n"
+                        "    \$arguments = array();\n"
                         .(count($paramNameArray) > 0 ?
-                            "\t\$arguments[] = ".implode('; $arguments[] = ', $paramNameArray).";\n" :
+                            "    \$arguments[] = ".implode('; $arguments[] = ', $paramNameArray).";\n" :
                             ''
                         )
-                        ."\t\$real_arg_count = func_num_args();\n"
-                        ."\t\$arg_count = count(\$arguments);\n"
-                        ."\tif (\$real_arg_count > \$arg_count) {\n"
-                        ."\t\tfor (\$i = \$arg_count; \$i < \$real_arg_count; \$i++)\n"
-                        ."\t\t\t\$arguments[] = func_get_arg(\$i);\n"
-                        ."\t}\n"
+                        ."    \$real_arg_count = func_num_args();\n"
+                        ."    \$arg_count = count(\$arguments);\n"
+                        ."    if (\$real_arg_count > \$arg_count) {\n"
+                        ."        for (\$i = \$arg_count; \$i < \$real_arg_count; \$i++)\n"
+                        ."            \$arguments[] = func_get_arg(\$i);\n"
+                        ."    }\n"
                     ) : (
                         // We must use a debug_backtrace, because that's the
                         // best way to get all the passed arguments, by
                         // reference. 5.4 and up lets us limit it to 1 frame.
                         (version_compare(PHP_VERSION, '5.4.0') >= 0 ?
-                            "\t\$arguments = debug_backtrace(false, 1);\n" :
-                            "\t\$arguments = debug_backtrace(false);\n"
+                            "    \$arguments = debug_backtrace(false, 1);\n" :
+                            "    \$arguments = debug_backtrace(false);\n"
                         )
-                        ."\t\$arguments = \$arguments[0]['args'];\n"
+                        ."    \$arguments = \$arguments[0]['args'];\n"
                     )
                 )
-                ."\t\$function = array(\$this->_hookObject, '$fname');\n"
-                ."\t\$data = array();\n"
-                ."\t\\SciActive\\Hook::runCallbacks(\$this->_hookPrefix.'$fname', \$arguments, 'before', \$this->_hookObject, \$function, \$data);\n"
-                ."\tif (\$arguments !== false) {\n"
-                ."\t\t\$return = call_user_func_array(\$function, \$arguments);\n"
-                ."\t\tif ((object) \$return === \$return && get_class(\$return) === '$className')\n"
-                ."\t\t\t\\SciActive\\Hook::hookObject(\$return, '$prefix', false);\n"
-                ."\t\t\$return = array(\$return);\n"
-                ."\t\t\\SciActive\\Hook::runCallbacks(\$this->_hookPrefix.'$fname', \$return, 'after', \$this->_hookObject, \$function, \$data);\n"
-                ."\t\tif ((array) \$return === \$return)\n"
-                ."\t\t\treturn \$return[0];\n"
-                ."\t}\n"
+                ."    \$function = array(\$this->_hookObject, '$fname');\n"
+                ."    \$data = array();\n"
+                ."    \\SciActive\\Hook::runCallbacks(\$this->_hookPrefix.'$fname', \$arguments, 'before', \$this->_hookObject, \$function, \$data);\n"
+                ."    if (\$arguments !== false) {\n"
+                ."        \$return = call_user_func_array(\$function, \$arguments);\n"
+                ."        if ((object) \$return === \$return && get_class(\$return) === '$className')\n"
+                ."            \\SciActive\\Hook::hookObject(\$return, '$prefix', false);\n"
+                ."        \$return = array(\$return);\n"
+                ."        \\SciActive\\Hook::runCallbacks(\$this->_hookPrefix.'$fname', \$return, 'after', \$this->_hookObject, \$function, \$data);\n"
+                ."        if ((array) \$return === \$return)\n"
+                ."            return \$return[0];\n"
+                ."    }\n"
                 ."}\n\n";
             }
             unset($curMethod);
