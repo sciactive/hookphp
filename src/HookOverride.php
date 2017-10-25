@@ -1,4 +1,6 @@
-<?php namespace SciActive;
+<?php
+namespace SciActive;
+
 /**
  * Dynamic HookOverride class.
  *
