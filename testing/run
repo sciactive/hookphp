@@ -7,9 +7,9 @@ echo "Use \`run coverage\` to build coverage clover."
 echo
 
 if [[ "$1" == "coverage" ]]; then
-    CVG="--coverage-clover logs/clover.xml"
+  CVG="--coverage-clover logs/clover.xml"
 else
-    CVG=""
+  CVG=""
 fi
 
 cd $(dirname $0)

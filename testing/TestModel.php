@@ -11,7 +11,12 @@ class TestModel {
     return false;
   }
 
+  public function testFunctionVariadic($argument, ...$rest) {
+    return [$argument, $rest];
+  }
+
   public function testReferenceFunction(&$argument) {
+    $argument['test'] = 12;
     return $argument;
   }
 }

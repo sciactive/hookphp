@@ -9,7 +9,7 @@ namespace SciActive;
  * Hooks are used to call a callback when a method is called and optionally
  * manipulate the arguments/function call/return value.
  *
- * @version 1.2.2
+ * @version 2.0.0
  * @license https://www.gnu.org/licenses/lgpl.html
  * @author Hunter Perrin <hperrin@gmail.com>
  * @copyright SciActive.com
@@ -176,7 +176,8 @@ class Hook {
         $paramArray = $paramNameArray = array();
         foreach ($params as &$curParam) {
           $paramName = $curParam->getName();
-          $paramPrefix = $curParam->isPassedByReference() ? '&' : '';
+          $paramPrefix = $curParam->isVariadic() ? '...' : '';
+          $paramPrefix .= $curParam->isPassedByReference() ? '&' : '';
           if ($curParam->isDefaultValueAvailable()) {
             $paramSuffix = ' = '.var_export($curParam->getDefaultValue(), true);
           } else {
