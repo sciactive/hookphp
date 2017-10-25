@@ -196,39 +196,39 @@ class Hook {
             // consistent with official PHP. However, it also
             // returns arguments by value, instead of by reference.
             // So, we must use a more direct method.
-            "  \$arguments = array();\n"
+            "  \$_HOOK_arguments = array();\n"
             .(count($paramNameArray) > 0 ?
-              "  \$arguments[] = ".implode('; $arguments[] = ', $paramNameArray).";\n" :
+              "  \$_HOOK_arguments[] = ".implode('; $_HOOK_arguments[] = ', $paramNameArray).";\n" :
               ''
             )
-            ."  \$real_arg_count = func_num_args();\n"
-            ."  \$arg_count = count(\$arguments);\n"
-            ."  if (\$real_arg_count > \$arg_count) {\n"
-            ."    for (\$i = \$arg_count; \$i < \$real_arg_count; \$i++)\n"
-            ."      \$arguments[] = func_get_arg(\$i);\n"
+            ."  \$_HOOK_real_arg_count = func_num_args();\n"
+            ."  \$_HOOK_arg_count = count(\$_HOOK_arguments);\n"
+            ."  if (\$_HOOK_real_arg_count > \$_HOOK_arg_count) {\n"
+            ."    for (\$i = \$_HOOK_arg_count; \$i < \$_HOOK_real_arg_count; \$i++)\n"
+            ."      \$_HOOK_arguments[] = func_get_arg(\$i);\n"
             ."  }\n"
           ) : (
             // We must use a debug_backtrace, because that's the
             // best way to get all the passed arguments, by
             // reference. 5.4 and up lets us limit it to 1 frame.
             (version_compare(PHP_VERSION, '5.4.0') >= 0 ?
-              "  \$arguments = debug_backtrace(false, 1);\n" :
-              "  \$arguments = debug_backtrace(false);\n"
+              "  \$_HOOK_arguments = debug_backtrace(false, 1);\n" :
+              "  \$_HOOK_arguments = debug_backtrace(false);\n"
             )
-            ."  \$arguments = \$arguments[0]['args'];\n"
+            ."  \$_HOOK_arguments = \$_HOOK_arguments[0]['args'];\n"
           )
         )
-        ."  \$function = array(\$this->_hookObject, '$fname');\n"
-        ."  \$data = array();\n"
-        ."  \\SciActive\\Hook::runCallbacks(\$this->_hookPrefix.'$fname', \$arguments, 'before', \$this->_hookObject, \$function, \$data);\n"
-        ."  if (\$arguments !== false) {\n"
-        ."    \$return = call_user_func_array(\$function, \$arguments);\n"
-        ."    if ((object) \$return === \$return && get_class(\$return) === '$className')\n"
-        ."      \\SciActive\\Hook::hookObject(\$return, '$prefix', false);\n"
-        ."    \$return = array(\$return);\n"
-        ."    \\SciActive\\Hook::runCallbacks(\$this->_hookPrefix.'$fname', \$return, 'after', \$this->_hookObject, \$function, \$data);\n"
-        ."    if ((array) \$return === \$return)\n"
-        ."      return \$return[0];\n"
+        ."  \$_HOOK_function = array(\$this->_hookObject, '$fname');\n"
+        ."  \$_HOOK_data = array();\n"
+        ."  \\SciActive\\Hook::runCallbacks(\$this->_hookPrefix.'$fname', \$_HOOK_arguments, 'before', \$this->_hookObject, \$_HOOK_function, \$_HOOK_data);\n"
+        ."  if (\$_HOOK_arguments !== false) {\n"
+        ."    \$_HOOK_return = call_user_func_array(\$_HOOK_function, \$_HOOK_arguments);\n"
+        ."    if ((object) \$_HOOK_return === \$_HOOK_return && get_class(\$_HOOK_return) === '$className')\n"
+        ."      \\SciActive\\Hook::hookObject(\$_HOOK_return, '$prefix', false);\n"
+        ."    \$_HOOK_return = array(\$_HOOK_return);\n"
+        ."    \\SciActive\\Hook::runCallbacks(\$this->_hookPrefix.'$fname', \$_HOOK_return, 'after', \$this->_hookObject, \$_HOOK_function, \$_HOOK_data);\n"
+        ."    if ((array) \$_HOOK_return === \$_HOOK_return)\n"
+        ."      return \$_HOOK_return[0];\n"
         ."  }\n"
         ."}\n\n";
       }

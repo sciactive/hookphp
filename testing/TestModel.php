@@ -15,8 +15,8 @@ class TestModel {
     return [$argument, $rest];
   }
 
-  public function testReferenceFunction(&$argument) {
-    $argument['test'] = 12;
-    return $argument;
+  public function testReferenceFunction(&$data) {
+    $data['test'] = 12;
+    return $data;
   }
 }
