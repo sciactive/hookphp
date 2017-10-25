@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "12e6dd1d45d5d71e7006f6010bf3928e",
+    "content-hash": "7195a941dc13b8d92ab5485fa52b9074",
     "packages": [],
     "packages-dev": [
         {
@@ -1090,7 +1090,7 @@
         },
         {
             "name": "sebastian/global-state",
-            "version": "2.0.1",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/global-state.git",
