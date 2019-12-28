@@ -81,11 +81,20 @@ class HookOverride__NAMEHERE_ extends HookOverride implements \JsonSerializable 
   }
 
   public function jsonSerialize() {
-    if (is_callable($this->_hookObject, 'jsonSerialize')) {
-      $args = func_get_args();
-      return call_user_func_array(array($this->_hookObject, 'jsonSerialize'), $args);
-    } else {
-      return $this->_hookObject;
+    $_HOOK_arguments = func_get_args();
+    $_HOOK_function = array($this->_hookObject, 'jsonSerialize');
+    $_HOOK_data = array();
+    \SciActive\Hook::runCallbacks($this->_hookPrefix.'jsonSerialize', $_HOOK_arguments, 'before', $this->_hookObject, $_HOOK_function, $_HOOK_data);
+    if ($_HOOK_arguments !== false) {
+      if (is_callable($this->_hookObject, 'jsonSerialize') && !empty($_HOOK_arguments)) {
+        $_HOOK_return = array(call_user_func_array($_HOOK_function, $_HOOK_arguments));
+      } else {
+        $_HOOK_return = array($this->_hookObject);
+      }
+      \SciActive\Hook::runCallbacks($this->_hookPrefix.'jsonSerialize', $_HOOK_return, 'after', $this->_hookObject, $_HOOK_function, $_HOOK_data);
+      if ((array) $_HOOK_return === $_HOOK_return) {
+        return $_HOOK_return[0];
+      }
     }
   }
 

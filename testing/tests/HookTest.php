@@ -101,6 +101,19 @@ class HookTest extends \PHPUnit\Framework\TestCase {
   }
 
   /**
+   * @depends testHooking
+   */
+  public function testJSONSerialization($testModel) {
+    $this->assertObjectNotHasAttribute('testJson', json_decode(json_encode($testModel)));
+    $ids = Hook::addCallback('TestModel->jsonSerialize', 1, function (&$return, $name, &$object, &$function, &$data) {
+      $return[0]->testJson = 'success';
+    });
+    $this->assertEquals('success', json_decode(json_encode($testModel))->testJson);
+    $this->assertEquals(1, Hook::delCallbackByID('TestModel->jsonSerialize', $ids[0]));
+    $this->assertEquals(0, count(Hook::getCallbacks()['TestModel->jsonSerialize']));
+  }
+
+  /**
    * Do this one last, cause it leaves its callbacks.
    *
    * @depends testHooking

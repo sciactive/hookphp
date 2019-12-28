@@ -24,9 +24,9 @@ Now you can start setting up objects for method hooking.
 
 ```php
 class Test {
-    function testFunction($string) {
-        echo $string;
-    }
+  function testFunction($string) {
+    echo $string;
+  }
 }
 $obj = new Test();
 \SciActive\Hook::hookObject($obj, 'Test->');
@@ -36,7 +36,7 @@ And modifying their method calls.
 
 ```php
 \SciActive\Hook::addCallback('Test->testFunction', -2, function(&$arguments, $name, &$object, &$function, &$data){
-    $arguments[0] = 'New argument instead.';
+  $arguments[0] = 'New argument instead.';
 });
 ```
 
